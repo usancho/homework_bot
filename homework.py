@@ -71,19 +71,18 @@ def get_api_answer(timestamp):
         return homework_info.json()
     except requests.exceptions.RequestException:
         message = f'Запрос к API не выполнен! {homework_info.status_code}'
-        logger.error(message)
-        raise EmptyAPIResponseError('{message}')
+        raise EmptyAPIResponseError(f'{message}')
 
 
 def check_response(response):
     """Проверка ответа API на соответствие."""
     if not isinstance(response, dict):
         raise TypeError('Ответ API не является словарем!')
-    valid_response = response
-    homeworks = valid_response.get('homeworks')
+    homeworks = response.get('homeworks')
+    current_date = response.get('current_date')
     if not homeworks:
         raise KeyError('Ключ homeworks не найден!')
-    if 'current_date' not in valid_response:
+    if not current_date:
         raise KeyError('Ключ current_date не найден!')
     if not isinstance(homeworks, list):
         raise TypeError('По запросу получен не список!')
