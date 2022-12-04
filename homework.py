@@ -71,7 +71,7 @@ def get_api_answer(timestamp):
         return homework_info.json()
     except requests.exceptions.RequestException:
         message = f'Запрос к API не выполнен! {homework_info.status_code}'
-        raise EmptyAPIResponseError(f'{message}')
+        raise EmptyAPIResponseError(message)
 
 
 def check_response(response):
@@ -91,10 +91,10 @@ def check_response(response):
 
 def parse_status(homework):
     """Парсинг статуса домашки."""
-    homework_name = homework.get('homework_name')
-    homework_status = homework.get('status')
     if not isinstance(homework, dict):
         raise KeyError('Ответ API не является словарем!')
+    homework_name = homework.get('homework_name')
+    homework_status = homework.get('status')
     if 'status' not in homework:
         raise KeyError('Ответом не получен ключ status!')
     if 'homework_name' not in homework:
